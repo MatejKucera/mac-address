@@ -8,5 +8,11 @@ branches:
     - master
 before_install:
   - travis_retry composer self-update
-  - composer install
-script: phpunit
+  - travis_retry composer install --dev --no-interaction --no-suggest
+
+script:
+  - mkdir -p build/logs
+  - phpunit
+
+after_script:
+  - php vendor/bin/php-coveralls -v
