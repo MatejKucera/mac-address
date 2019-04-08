@@ -1,3 +1,4 @@
 .idea/
 vendor/
 build/
+data/vendors_work.db

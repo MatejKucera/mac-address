@@ -62,7 +62,26 @@ final class BasicTest extends TestCase
 
     public function testArgumentException() {
         $this->expectException(InvalidArgumentException::class);
-        $mac = Mac::parse('aa:bb:cc:dd:ee');
+        Mac::parse('aa:bb:cc:dd:ee');
     }
 
+    public function testVendors() {
+        $vendor9 = Mac::parse("70B3D5DA8555")->vendor();
+        $this->assertEquals('70B3D5DA8', $vendor9->prefix);
+        $this->assertEquals('Tagarno AS', $vendor9->company);
+        $this->assertEquals('Sandovej 4 Horsens Denmark DK DK-8700', $vendor9->address);
+
+        $vendor7 = Mac::parse("7CBACCE65154")->vendor();
+        $this->assertEquals('7CBACCE', $vendor7->prefix);
+        $this->assertEquals('ALPHA TECHNOLOGIES, LLC', $vendor7->company);
+        $this->assertEquals('3030 GILCHRIST ROAD AKRON OH US 44305', $vendor7->address);
+
+        $vendor6 = Mac::parse("78FE3D651485")->vendor();
+        $this->assertEquals('78FE3D', $vendor6->prefix);
+        $this->assertEquals('Juniper Networks', $vendor6->company);
+        $this->assertEquals('1133 Innovation Way Sunnyvale CA US 94089', $vendor6->address);
+
+        $vendorNull = Mac::parse("AABBCCDDEEFF")->vendor();
+        $this->assertEquals(null, $vendorNull);
+    }
 }

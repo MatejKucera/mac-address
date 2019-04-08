@@ -2,6 +2,7 @@
 namespace MatejKucera\MacAddress;
 
 use InvalidArgumentException;
+use PDO;
 
 class Mac
 {
@@ -22,6 +23,8 @@ class Mac
 
     private static $_globalCase = null;
     private static $_globalFormat = null;
+
+    private static $_db = null;
 
     public function __construct($mac)
     {
@@ -89,6 +92,29 @@ class Mac
         return $result;
     }
 
+    public function vendor() {
+        $mac6 = substr($this->get(self::FORMAT_PLAIN),0, 6);
+        $mac7 = substr($this->get(self::FORMAT_PLAIN),0, 7);
+        $mac9 = substr($this->get(self::FORMAT_PLAIN),0, 9);
+
+        $result9 = self::db()->query('SELECT prefix,company,address FROM vendors WHERE prefix LIKE "'.$mac9.'%"')->fetch();
+        if($result9) {
+            return new Vendor($result9[0], $result9[1], $result9[2]);
+        }
+
+        $result7 = self::db()->query('SELECT prefix,company,address FROM vendors WHERE prefix LIKE "'.$mac7.'%"')->fetch();
+        if($result7) {
+            return new Vendor($result7[0], $result7[1], $result7[2]);
+        }
+
+        $result6 = self::db()->query('SELECT prefix,company,address FROM vendors WHERE prefix LIKE "'.$mac6.'%"')->fetch();
+        if($result6) {
+            return new Vendor($result6[0], $result6[1], $result6[2]);
+        }
+
+        return null;
+    }
+
     public static function getGlobalCase() :?int {
         return self::$_globalCase;
     }
@@ -103,5 +129,13 @@ class Mac
 
     public static function setGlobalFormat(string $format) :void {
         self::$_globalFormat = $format;
+    }
+
+    private static function db() {
+        if(self::$_db == null) {
+            self::$_db = new PDO('sqlite:data/vendors.db');
+        }
+
+        return self::$_db;
     }
 }

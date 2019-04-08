@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/MatejKucera/mac-address.svg?branch=master)](https://travis-ci.org/MatejKucera/mac-address)
 [![Coverage Status](https://coveralls.io/repos/github/MatejKucera/mac-address/badge.svg?branch=master)](https://coveralls.io/github/MatejKucera/mac-address?branch=master)
+[![composer.lock available](https://poser.pugx.org/matejkucera/mac-address/composerlock)](https://packagist.org/packages/matejkucera/mac-address)
+[![Latest Stable Version](https://poser.pugx.org/matejkucera/mac-address/v/stable)](https://packagist.org/packages/matejkucera/mac-address)
 
 ## Introduction
 This library makes manipulation with MAC addresses easiser. It parses the input and 
@@ -57,5 +59,25 @@ echo $mac->get();
 
 ### Vendor & prefixes
 
-Work in progress.
+This package is regularly updated (last digit in version changes) with SQLite database
 
+```php
+# Define global behaviour:
+$mac = Mac::parse("78FE3D651485");
+
+# Returns vendor object
+$vendor = $mac->vendor();
+
+# Now you can print vendor infos
+echo $vendor->prefix;  // outputs: 78FE3D
+echo $vendor->company; // outputs: Juniper Networks
+echo $vendor->address; // outputs: 1133 Innovation Way Sunnyvale CA US 94089
+```
+
+### Planned features
+
+This is included only as my personal TODO list :)
+* better MAC validation
+* strict/non-strict validator
+* automatically updated vendors list
+* online API alternative for vendors (instead of sqlite db)
