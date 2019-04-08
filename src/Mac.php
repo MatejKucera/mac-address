@@ -133,7 +133,8 @@ class Mac
 
     private static function db() {
         if(self::$_db == null) {
-            self::$_db = new PDO('sqlite:data/vendors.db');
+            $database = realpath(dirname(__FILE__)).'/../data/vendors.db';
+            self::$_db = new PDO('sqlite:'.$database);
         }
 
         return self::$_db;
